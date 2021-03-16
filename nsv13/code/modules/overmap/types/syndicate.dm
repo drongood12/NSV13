@@ -16,11 +16,10 @@
 	icon = 'nsv13/icons/overmap/syndicate/tuningfork.dmi'
 	icon_state = "tuningfork"
 	desc = "A highly modular cruiser setup which, despite its size, is capable of delivering devastating firepower."
-	bound_width = 96 //Change this on a per ship basis
-	bound_height = 96
 	mass = MASS_MEDIUM
 	sprite_size = 96
 	damage_states = FALSE
+	obj_integrity = 1000
 	max_integrity = 1000
 	integrity_failure = 1000
 	ai_controlled = FALSE
@@ -30,6 +29,15 @@
 	role = PVP_SHIP
 	starting_system = "The Badlands" //Relatively safe start, fleets won't hotdrop you here.
 	armor = list("overmap_light" = 70, "overmap_heavy" = 20)
+
+/obj/structure/overmap/syndicate/pvp/apply_weapons()
+	weapon_types[FIRE_MODE_TORPEDO] = new/datum/ship_weapon/torpedo_launcher(src)
+	weapon_types[FIRE_MODE_50CAL] = new /datum/ship_weapon/fiftycal(src)
+	weapon_types[FIRE_MODE_AMS] = new /datum/ship_weapon/vls(src)
+	weapon_types[FIRE_MODE_GAUSS] = new /datum/ship_weapon/gauss(src)
+	if(flak_battery_amount > 0)
+		weapon_types[FIRE_MODE_FLAK] = new /datum/ship_weapon/flak(src)
+	weapon_types[FIRE_MODE_MAC] = new /datum/ship_weapon/mac(src)
 
 /obj/structure/overmap/syndicate/pvp/hulk //Larger PVP ship for larger pops.
 	name = "SSV Hulk"
@@ -41,6 +49,7 @@
 	sprite_size = 48
 	pixel_z = -96
 	pixel_w = -96
+	obj_integrity = 750
 	max_integrity = 750 //Max health
 	integrity_failure = 750
 	role = PVP_SHIP
@@ -94,6 +103,7 @@
 	bound_height = 128
 	bound_width = 128
 	torpedo_type = /obj/item/projectile/guided_munition/torpedo/nuclear
+	obj_integrity = 1500
 	max_integrity = 1500 //Max health
 	integrity_failure = 1500
 	shots_left = 7 //Reload yer nukes
@@ -106,6 +116,7 @@
 	shots_left = 15
 	torpedoes = 10
 	missiles = 15
+	obj_integrity = 2000
 	max_integrity = 2000 //Max health
 	integrity_failure = 2000
 	bounty = 15000
@@ -177,6 +188,7 @@
 	damage_states = FALSE
 	bound_height = 96
 	bound_width = 96
+	obj_integrity = 1500
 	max_integrity = 1500 //Tanky so that it can survive to deploy multiple fighter waves.
 	integrity_failure = 1500
 	bounty = 3000
@@ -212,6 +224,7 @@
 	mass = MASS_TITAN
 	sprite_size = 48
 	damage_states = TRUE
+	obj_integrity = 15000
 	max_integrity = 15000 //Max health
 	integrity_failure = 15000
 	bounty = 20000
@@ -227,7 +240,8 @@
 	icon_state = "assault"
 	mass = MASS_LARGE
 	sprite_size = 48
-	damage_states = TRUE
+	damage_states = FALSE
+	obj_integrity = 1200
 	max_integrity = 1200 //Max health
 	integrity_failure = 1200
 	missiles = 0
@@ -274,6 +288,7 @@
 	damage_states = TRUE
 	bound_width = 128
 	bound_height = 128
+	obj_integrity = 700
 	max_integrity = 700 //Max health
 	integrity_failure = 700
 	missiles = 5
@@ -298,6 +313,7 @@
 	icon_state = "aspala"
 	mass = MASS_MEDIUM
 	sprite_size = 48
+	obj_integrity = 700
 	max_integrity = 700 //Max health
 	bound_height = 96
 	bound_width = 96
@@ -327,7 +343,9 @@
 	icon_state = "fighter_syndicate"
 	damage_states = FALSE
 	brakes = FALSE
+	obj_integrity = 75
 	max_integrity = 75 //Super squishy!
+	integrity_failure = 75
 	sprite_size = 32
 	faction = "syndicate"
 	mass = MASS_TINY
@@ -337,7 +355,7 @@
 	torpedoes = 0
 	bounty = 250
 	armor = list("overmap_light" = 5, "overmap_heavy" = 5)
-	ai_trait = AI_TRAIT_ANTI_FIGHTER
+	ai_trait = AI_TRAIT_SWARMER
 
 /obj/structure/overmap/syndicate/ai/fighter/apply_weapons()
 	weapon_types[FIRE_MODE_PDC] = new/datum/ship_weapon/light_cannon(src)
@@ -348,7 +366,9 @@
 	icon_state = "bomber_syndicate"
 	damage_states = FALSE
 	brakes = FALSE
+	obj_integrity = 100
 	max_integrity = 100
+	integrity_failure = 100
 	sprite_size = 32
 	faction = "syndicate"
 	mass = MASS_TINY
@@ -356,8 +376,8 @@
 	torpedoes = 3
 	bounty = 250
 	armor = list("overmap_light" = 15, "overmap_heavy" = 0)
-	ai_trait = AI_TRAIT_DESTROYER
+	ai_trait = list(AI_TRAIT_DESTROYER, AI_TRAIT_SWARMER)
 
 /obj/structure/overmap/syndicate/ai/bomber/apply_weapons()
-	weapon_types[FIRE_MODE_PDC] = new/datum/ship_weapon/light_cannon
-	weapon_types[FIRE_MODE_TORPEDO] = new/datum/ship_weapon/torpedo_launcher
+	weapon_types[FIRE_MODE_PDC] = new/datum/ship_weapon/light_cannon(src)
+	weapon_types[FIRE_MODE_TORPEDO] = new/datum/ship_weapon/torpedo_launcher(src)
